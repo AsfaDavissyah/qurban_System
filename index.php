@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Qurban System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #2d5016;
+      --light-green: #4a7c59;
+      --accent-green: #689f85;
+      --soft-green: #a8caba;
+      --bg-green: #f0f7f4;
+      --white: #ffffff;
+      --text-dark: #2c3e50;
+      --text-light: #6c757d;
+      --shadow: rgba(45, 80, 22, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, var(--bg-green) 0%, #e8f5e8 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(168, 202, 186, 0.1) 0%, transparent 70%);
+      animation: float 20s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-20px, -20px) rotate(180deg); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px var(--shadow);
+      padding: 2.5rem;
+      margin-top: 3rem;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-out forwards;
+    }
+
+    @keyframes slideUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-green), var(--accent-green), var(--soft-green));
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 10px 30px rgba(45, 80, 22, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .login-icon i {
+      font-size: 2rem;
+      color: var(--white);
+    }
+
+    .login-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: var(--primary-green);
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-subtitle {
+      font-family: 'Lato', sans-serif;
+      color: var(--text-light);
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-label i {
+      color: var(--accent-green);
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 0.2rem rgba(168, 202, 186, 0.25);
+      background: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .form-control:hover {
+      border-color: var(--soft-green);
+      transform: translateY(-1px);
+    }
+
+    .btn-login {
+      background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+      border: none;
+      border-radius: 12px;
+      padding: 0.875rem 2rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--white);
+      width: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-login:hover::before {
+      left: 100%;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(45, 80, 22, 0.3);
+      background: linear-gradient(135deg, var(--light-green), var(--accent-green));
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .alert {
+      border-radius: 12px;
+      border: none;
+      font-family: 'Lato', sans-serif;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .alert-danger {
+      background: linear-gradient(135deg, #ffebee, #fce4ec);
+      color: #c62828;
+      border-left: 4px solid #e57373;
+    }
+
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .floating-element {
+      position: absolute;
+      background: var(--soft-green);
+      border-radius: 50%;
+      opacity: 0.1;
+      animation: floatAround 15s linear infinite;
+    }
+
+    .floating-element:nth-child(1) {
+      width: 20px;
+      height: 20px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-element:nth-child(2) {
+      width: 15px;
+      height: 15px;
+      top: 60%;
+      right: 15%;
+      animation-delay: 5s;
+    }
+
+    .floating-element:nth-child(3) {
+      width: 25px;
+      height: 25px;
+      bottom: 30%;
+      left: 20%;
+      animation-delay: 10s;
+    }
+
+    @keyframes floatAround {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+      100% { transform: translateY(0px) rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .login-card {
+        margin: 1rem;
+        padding: 2rem 1.5rem;
+      }
+      
+      .login-title {
+        font-size: 1.5rem;
+      }
+      
+      .login-icon {
+        width: 70px;
+        height: 70px;
+      }
+      
+      .login-icon i {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* Loading state for button */
+    .btn-login.loading {
+      pointer-events: none;
+      position: relative;
+    }
+
+    .btn-login.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-elements">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+  </div>
+  
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="login-card">
+          <div class="login-header">
+            <div class="login-icon">
+              <i class="fas fa-mosque"></i>
+            </div>
+            <h3 class="login-title">Sistem Qurban</h3>
+            <p class="login-subtitle">Masuk ke akun Anda</p>
+          </div>
+          
+          <!-- Simulasi PHP error message -->
+          <!-- <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            NIK atau password salah!
+          </div> -->
+          
+          <form action="auth/login.php" method="POST" id="loginForm">
+            <div class="form-group">
+              <label for="nik" class="form-label">
+                <i class="fas fa-id-card"></i>
+                NIK
+              </label>
+              <input type="text" class="form-control" id="nik" name="nik" required placeholder="Masukkan NIK Anda">
+            </div>
+            
+            <div class="form-group">
+              <label for="password" class="form-label">
+                <i class="fas fa-lock"></i>
+                Kata Sandi
+              </label>
+              <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi">
+            </div>
+            
+            <button type="submit" class="btn btn-login">
+              <i class="fas fa-sign-in-alt me-2"></i>
+              Masuk
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Add loading state to button on form submit
+    document.getElementById('loginForm').addEventListener('submit', function() {
+      const btn = document.querySelector('.btn-login');
+      btn.classList.add('loading');
+      btn.innerHTML = '<span style="opacity: 0;">Memproses...</span>';
+    });
+
+    // Add focus animations
+    document.querySelectorAll('.form-control').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+</body>
+</html>
