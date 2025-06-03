@@ -147,6 +147,7 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             display: flex;
             gap: 0.5rem;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn-action {
@@ -188,6 +189,27 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             color: white;
             text-decoration: none;
             transform: scale(1.05);
+        }
+
+        .btn-qurban {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-qurban:hover {
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            transform: scale(1.05);
+        }
+
+        .btn-qurban:disabled {
+            background: rgba(107, 114, 128, 0.2);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* Status Badges */
@@ -286,10 +308,67 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
                 transform: translateY(0);
             }
         }
-    </style>
+
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+</style>
 </head>
 <body>
     <div class="container">
+        <!-- Alert Messages -->
+        <?php if (isset($_GET['success'])): ?>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle me-2"></i>
+                <?php
+                switch($_GET['success']) {
+                    case 'processed':
+                        echo 'Data warga berhasil diproses dan ditambahkan ke daftar peserta qurban!';
+                        break;
+                    default:
+                        echo 'Operasi berhasil dilakukan!';
+                }
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <?php
+                switch($_GET['error']) {
+                    case 'already_processed':
+                        echo 'Warga ini sudah terdaftar sebagai peserta qurban!';
+                        break;
+                    case 'not_berqurban':
+                        echo 'Warga ini tidak terdaftar sebagai penyembelih qurban!';
+                        break;
+                    case 'failed':
+                        echo 'Gagal memproses data. Silakan coba lagi!';
+                        break;
+                    default:
+                        echo 'Terjadi kesalahan. Silakan coba lagi!';
+                }
+                ?>
+            </div>
+        <?php endif; ?>
+
         <!-- Page Header -->
         <div class="page-header">
             <h4><i class="fas fa-users me-2"></i>Data Warga</h4>
@@ -316,7 +395,17 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = $result->fetch_assoc()): ?>
+                        <?php 
+                        // Check which users are already processed in qurban_peserta
+                        $processed_users = [];
+                        $processed_result = $conn->query("SELECT nik FROM qurban_peserta");
+                        while ($processed_row = $processed_result->fetch_assoc()) {
+                            $processed_users[] = $processed_row['nik'];
+                        }
+                        
+                        while ($row = $result->fetch_assoc()): 
+                            $is_processed = in_array($row['nik'], $processed_users);
+                        ?>
                         <tr>
                             <td><?= $row['nik'] ?></td>
                             <td><?= $row['nama'] ?></td>
@@ -336,9 +425,20 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
                                     <a href="#" class="btn-action btn-edit" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="#" class="btn-action btn-delete" title="Hapus" onclick="">
+                                    <a href="#" class="btn-action btn-delete" title="Hapus" onclick="confirmDelete('<?= $row['nik'] ?>', '<?= $row['nama'] ?>')">
                                         <i class="fas fa-trash"></i>
                                     </a>
+                                    <?php if ($row['is_berqurban']): ?>
+                                        <?php if ($is_processed): ?>
+                                            <button class="btn-action btn-qurban" disabled title="Sudah Diproses">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        <?php else: ?>
+                                            <a href="process_qurban.php?nik=<?= $row['nik'] ?>" class="btn-action btn-qurban" title="Proses ke Peserta Qurban">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -368,6 +468,17 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             }
         }
 
+        function confirmProcess(nik, nama) {
+            if (confirm(`Apakah Anda yakin ingin memproses data warga "${nama}" ke daftar peserta qurban?\n\nData akan ditambahkan ke tabel qurban_peserta.`)) {
+                // Show loading state
+                const row = event.target.closest('tr');
+                addLoadingState(row);
+                
+                // Redirect to process script
+                window.location.href = `process_qurban.php?nik=${nik}`;
+            }
+        }
+
         // Optional: Add loading state when performing actions
         function addLoadingState(row) {
             row.classList.add('loading');
@@ -376,5 +487,17 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         function removeLoadingState(row) {
             row.classList.remove('loading');
         }
+
+        // Auto hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.remove();
+                }, 500);
+            });
+        }, 5000);
     </script>
 <?php include '../template/footer.php'; ?>
