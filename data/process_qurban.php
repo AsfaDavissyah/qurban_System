@@ -100,13 +100,14 @@ if (isset($_GET['nik'])) {
     }
 }
 
-// Get available hewan qurban - Fixed query
+// Get available hewan qurban - Updated query with admin fee calculation
 $hewan_qurban = $conn->query("
     SELECT 
         hq.id,
         hq.jenis,
         hq.jumlah,
         hq.harga_total,
+        hq.biaya_admin,
         hq.tanggal,
         COUNT(qp.id) as current_participants,
         CASE 
@@ -115,13 +116,28 @@ $hewan_qurban = $conn->query("
             ELSE 0
         END as available_slots,
         CASE 
+            WHEN hq.jenis = 'sapi' THEN 7 * hq.jumlah
+            WHEN hq.jenis = 'kambing' THEN 1 * hq.jumlah
+            ELSE 1
+        END as total_slots,
+        CASE 
             WHEN hq.jenis = 'sapi' THEN ROUND(hq.harga_total / (7 * hq.jumlah))
             WHEN hq.jenis = 'kambing' THEN ROUND(hq.harga_total / hq.jumlah)
             ELSE 150000
-        END as suggested_iuran
+        END as base_iuran,
+        CASE 
+            WHEN hq.jenis = 'sapi' THEN ROUND(hq.biaya_admin / (7 * hq.jumlah))
+            WHEN hq.jenis = 'kambing' THEN ROUND(hq.biaya_admin / hq.jumlah)
+            ELSE 0
+        END as admin_fee_per_slot,
+        CASE 
+            WHEN hq.jenis = 'sapi' THEN ROUND(hq.harga_total / (7 * hq.jumlah)) + ROUND(hq.biaya_admin / (7 * hq.jumlah))
+            WHEN hq.jenis = 'kambing' THEN ROUND(hq.harga_total / hq.jumlah) + ROUND(hq.biaya_admin / hq.jumlah)
+            ELSE 150000
+        END as total_iuran
     FROM hewan_qurban hq 
     LEFT JOIN qurban_peserta qp ON hq.id = qp.hewan_id 
-    GROUP BY hq.id, hq.jenis, hq.jumlah, hq.harga_total, hq.tanggal
+    GROUP BY hq.id, hq.jenis, hq.jumlah, hq.harga_total, hq.biaya_admin, hq.tanggal
     HAVING available_slots > 0
     ORDER BY hq.id
 ");
@@ -256,6 +272,20 @@ $hewan_qurban = $conn->query("
     .hewan-details {
         font-size: 0.9rem;
         color: #b3b3b3;
+        margin-bottom: 0.5rem;
+    }
+
+    .fee-breakdown {
+        font-size: 0.8rem;
+        color: #888;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.5rem;
+        border-radius: 4px;
+        margin-top: 0.5rem;
+    }
+
+    .fee-breakdown strong {
+        color: #e1f21f;
     }
 
     .badge {
@@ -362,7 +392,7 @@ $hewan_qurban = $conn->query("
                     <div class="form-group">
                         <label class="form-label">Pilih Hewan Qurban (Opsional)</label>
                         <div id="hewanOptions">
-                            <div class="hewan-option" data-id="" data-iuran="150000">
+                            <div class="hewan-option" data-id="" data-iuran="150000" data-base="150000" data-admin="0">
                                 <div class="selection-indicator">
                                     <div class="hewan-info">
                                         <strong>Tidak Dipilih Sekarang</strong>
@@ -371,12 +401,20 @@ $hewan_qurban = $conn->query("
                                     <div class="hewan-details">
                                         Admin dapat mengassign hewan nanti
                                     </div>
+                                    <div class="fee-breakdown">
+                                        <strong>Total Iuran: Rp 150.000</strong><br>
+                                        Iuran Dasar: Rp 150.000 | Biaya Admin: Rp 0
+                                    </div>
                                 </div>
                             </div>
 
                             <?php if ($hewan_qurban && $hewan_qurban->num_rows > 0): ?>
                                 <?php while ($hewan = $hewan_qurban->fetch_assoc()): ?>
-                                    <div class="hewan-option" data-id="<?= $hewan['id'] ?>" data-iuran="<?= $hewan['suggested_iuran'] ?>">
+                                    <div class="hewan-option"
+                                        data-id="<?= $hewan['id'] ?>"
+                                        data-iuran="<?= $hewan['total_iuran'] ?>"
+                                        data-base="<?= $hewan['base_iuran'] ?>"
+                                        data-admin="<?= $hewan['admin_fee_per_slot'] ?>">
                                         <div class="selection-indicator">
                                             <div class="hewan-info">
                                                 <strong><?= ucfirst($hewan['jenis']) ?> #<?= $hewan['id'] ?></strong>
@@ -384,9 +422,15 @@ $hewan_qurban = $conn->query("
                                             </div>
                                             <div class="hewan-details">
                                                 Jumlah: <?= $hewan['jumlah'] ?> |
-                                                Total: Rp <?= number_format($hewan['harga_total']) ?> |
-                                                Iuran: Rp <?= number_format($hewan['suggested_iuran']) ?> |
+                                                Total Harga: Rp <?= number_format($hewan['harga_total']) ?> |
+                                                Total Admin: Rp <?= number_format($hewan['biaya_admin']) ?> |
                                                 Tanggal: <?= date('d/m/Y', strtotime($hewan['tanggal'])) ?>
+                                            </div>
+                                            <div class="fee-breakdown">
+                                                <strong>Total Iuran: Rp <?= number_format($hewan['total_iuran']) ?></strong><br>
+                                                Iuran Dasar: Rp <?= number_format($hewan['base_iuran']) ?> |
+                                                Biaya Admin per Slot: Rp <?= number_format($hewan['admin_fee_per_slot']) ?><br>
+                                                <small>Total Slot: <?= $hewan['total_slots'] ?> | Tersedia: <?= $hewan['available_slots'] ?></small>
                                             </div>
                                         </div>
                                     </div>
@@ -405,7 +449,7 @@ $hewan_qurban = $conn->query("
                         <input type="number" class="form-control" name="jumlah_iuran" id="jumlah_iuran"
                             value="150000" required min="0" step="1000">
                         <small style="color: #b3b3b3; display: block; margin-top: 0.5rem;">
-                            Akan otomatis terisi berdasarkan hewan yang dipilih
+                            Akan otomatis terisi berdasarkan hewan yang dipilih (Iuran Dasar + Biaya Admin per Slot)
                         </small>
                     </div>
 
@@ -449,7 +493,9 @@ $hewan_qurban = $conn->query("
             hewanOptions.forEach((option, index) => {
                 console.log(`Option ${index}:`, {
                     id: option.getAttribute('data-id'),
-                    iuran: option.getAttribute('data-iuran')
+                    iuran: option.getAttribute('data-iuran'),
+                    base: option.getAttribute('data-base'),
+                    admin: option.getAttribute('data-admin')
                 });
 
                 option.addEventListener('click', function(e) {
@@ -468,15 +514,15 @@ $hewan_qurban = $conn->query("
 
                     // Set hidden input values
                     const hewanId = this.getAttribute('data-id') || '';
-                    const iuran = this.getAttribute('data-iuran') || '150000';
+                    const totalIuran = this.getAttribute('data-iuran') || '150000';
 
                     console.log('Setting values:', {
                         hewanId,
-                        iuran
+                        totalIuran
                     });
 
                     selectedHewanInput.value = hewanId;
-                    jumlahIuranInput.value = iuran;
+                    jumlahIuranInput.value = totalIuran;
 
                     console.log('Input values set:', {
                         selectedHewan: selectedHewanInput.value,
