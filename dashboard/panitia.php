@@ -16,7 +16,7 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
     }
 
     .dashboard-container {
-        max-width: 800px;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 0 1rem;
     }
@@ -72,12 +72,47 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         margin: 0;
     }
 
-    /* Menu Cards */
+    /* Menu Sections */
+    .menu-section {
+        margin-bottom: 3rem;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .section-title-icon {
+        width: 35px;
+        height: 35px;
+        background: rgba(225, 242, 31, 0.1);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .section-title-icon i {
+        font-size: 1rem;
+        color: #e1f21f;
+    }
+
+    /* Menu Grid */
     .menu-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-        margin-bottom: 3rem;
+        gap: 1.5rem;
+    }
+
+    .menu-grid.single-column {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
     }
 
     .menu-card {
@@ -161,6 +196,22 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         margin: 0;
     }
 
+    /* Special styling for personal QR card */
+    .personal-qr-card {
+        background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+        border: 1px solid #e1f21f;
+        position: relative;
+    }
+
+    .personal-qr-card::before {
+        opacity: 1;
+        background: linear-gradient(90deg, #e1f21f 0%, #c4d91f 100%);
+    }
+
+    .personal-qr-card .menu-icon {
+        background: rgba(225, 242, 31, 0.2);
+    }
+
     /* Logout Section */
     .logout-section {
         text-align: center;
@@ -196,19 +247,38 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         animation: fadeIn 0.6s ease-out;
     }
 
+    .menu-section {
+        animation: fadeInUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .menu-section:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+
+    .menu-section:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+
     .menu-card {
         animation: fadeInUp 0.6s ease-out;
         animation-fill-mode: both;
     }
 
-    .menu-card:nth-child(1) { animation-delay: 0.1s; }
-    .menu-card:nth-child(2) { animation-delay: 0.2s; }
+    .menu-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .menu-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
 
     @keyframes fadeInUp {
         from {
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -216,8 +286,13 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
     /* Responsive */
@@ -246,6 +321,10 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         .menu-title {
             font-size: 1.1rem;
         }
+
+        .section-title {
+            font-size: 1.2rem;
+        }
     }
 </style>
 
@@ -260,23 +339,50 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
             <p class="welcome-subtitle">Kelola kegiatan qurban sebagai panitia</p>
         </div>
 
-        <!-- Menu Grid -->
-        <div class="menu-grid">
-            <a href="../data/keuangan.php" class="menu-card">
-                <div class="menu-icon">
-                    <i class="fas fa-money-bill-wave"></i>
+        <!-- Personal Access Section -->
+        <div class="menu-section">
+            <h3 class="section-title">
+                <div class="section-title-icon">
+                    <i class="fas fa-user"></i>
                 </div>
-                <h4 class="menu-title">Input Pengeluaran</h4>
-                <p class="menu-description">Kelola dan input data pengeluaran untuk kegiatan qurban</p>
-            </a>
+                Akses Personal
+            </h3>
+            <div class="menu-grid single-column">
+                <a href="../data/pembagian_daging.php" class="menu-card personal-qr-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h4 class="menu-title">QR Code & Daging Saya</h4>
+                    <p class="menu-description">Lihat QR code personal dan informasi distribusi daging untuk diri sendiri</p>
+                </a>
+            </div>
+        </div>
 
-            <a href="../data/pembagian_daging.php" class="menu-card">
-                <div class="menu-icon">
-                    <i class="fas fa-hand-holding-heart"></i>
+        <!-- Panitia Functions Section -->
+        <div class="menu-section">
+            <h3 class="section-title">
+                <div class="section-title-icon">
+                    <i class="fas fa-tasks"></i>
                 </div>
-                <h4 class="menu-title">Distribusi Daging</h4>
-                <p class="menu-description">Atur pembagian dan distribusi daging qurban kepada warga</p>
-            </a>
+                Fungsi Panitia
+            </h3>
+            <div class="menu-grid">
+                <a href="../data/keuangan.php" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h4 class="menu-title">Kelola Keuangan</h4>
+                    <p class="menu-description">Input dan kelola pengeluaran serta transaksi keuangan kegiatan qurban</p>
+                </a>
+
+                <a href="../data/pembagian_daging.php?view=admin" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h4 class="menu-title">Kelola Distribusi Daging</h4>
+                    <p class="menu-description">Atur dan kelola pembagian serta distribusi daging qurban kepada seluruh warga</p>
+                </a>
+            </div>
         </div>
 
         <!-- Logout Section -->

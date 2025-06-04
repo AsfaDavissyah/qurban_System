@@ -15,7 +15,7 @@
       --card-dark: #1e1e1e;
       --border-dark: #2a2a2a;
       --text-primary: #ffffff;
-      --text-secondary: #b3b3b3;
+      --text-secondary:rgb(252, 252, 252);
       --text-muted: #808080;
       --success: #10b981;
       --danger: #ef4444;
@@ -462,11 +462,11 @@
             <p class="login-subtitle">Masuk ke akun Anda</p>
           </div>
 
-          <!-- Simulasi PHP error message -->
-          <!-- <div class="alert alert-danger">
+          <!-- Simulasi PHP error message  -->
+          <div class="alert alert-danger">
             <i class="fas fa-exclamation-circle me-2"></i>
             NIK atau password salah!
-          </div> -->
+          </div> 
 
           <form action="auth/login.php" method="POST" id="loginForm">
             <div class="form-group">
@@ -479,7 +479,7 @@
 
             <div class="form-group">
               <label for="password" class="form-label">
-                <i class="fas fa-lock"></i>
+                <i class="fas fa-lock "></i>
                 Kata Sandi
               </label>
               <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi">
