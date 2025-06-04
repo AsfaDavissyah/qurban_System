@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <title>Login Qurban System</title>
@@ -8,15 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-green: #2d5016;
-      --light-green: #4a7c59;
-      --accent-green: #689f85;
-      --soft-green: #a8caba;
-      --bg-green: #f0f7f4;
-      --white: #ffffff;
-      --text-dark: #2c3e50;
-      --text-light: #6c757d;
-      --shadow: rgba(45, 80, 22, 0.1);
+      --primary-color: #e1f21f;
+      --primary-dark: #c5d61a;
+      --bg-dark: #121212;
+      --card-dark: #1e1e1e;
+      --border-dark: #2a2a2a;
+      --text-primary: #ffffff;
+      --text-secondary: #b3b3b3;
+      --text-muted: #808080;
+      --success: #10b981;
+      --danger: #ef4444;
+      --shadow: rgba(225, 242, 31, 0.1);
     }
 
     * {
@@ -27,7 +30,7 @@
 
     body {
       font-family: 'Lato', sans-serif;
-      background: linear-gradient(135deg, var(--bg-green) 0%, #e8f5e8 100%);
+      background-color: var(--bg-dark);
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
@@ -40,14 +43,21 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(168, 202, 186, 0.1) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(225, 242, 31, 0.05) 0%, transparent 70%);
       animation: float 20s ease-in-out infinite;
       z-index: -1;
     }
 
     @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(-20px, -20px) rotate(180deg); }
+
+      0%,
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      50% {
+        transform: translate(-20px, -20px) rotate(180deg);
+      }
     }
 
     .container {
@@ -56,9 +66,10 @@
     }
 
     .login-card {
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 20px 40px var(--shadow);
+      background: var(--card-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
       padding: 2.5rem;
       margin-top: 3rem;
       position: relative;
@@ -80,8 +91,14 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, var(--primary-green), var(--accent-green), var(--soft-green));
+      height: 3px;
+      background: var(--primary-color);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .login-card:hover::before {
+      opacity: 1;
     }
 
     .login-header {
@@ -92,38 +109,58 @@
     .login-icon {
       width: 80px;
       height: 80px;
-      background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-      border-radius: 50%;
+      background: rgba(225, 242, 31, 0.1);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 1.5rem;
-      box-shadow: 0 10px 30px rgba(45, 80, 22, 0.2);
+      box-shadow: 0 10px 30px rgba(225, 242, 31, 0.1);
       animation: pulse 2s infinite;
+      transition: all 0.3s ease;
+    }
+
+    .login-card:hover .login-icon {
+      background: var(--primary-color);
+      transform: scale(1.05);
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
 
     .login-icon i {
       font-size: 2rem;
-      color: var(--white);
+      color: var(--primary-color);
+      transition: color 0.3s ease;
+    }
+
+    .login-card:hover .login-icon i {
+      color: var(--bg-dark);
     }
 
     .login-title {
       font-family: 'Poppins', sans-serif;
       font-weight: 600;
-      color: var(--primary-green);
+      color: var(--text-primary);
       font-size: 1.8rem;
       margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
     }
 
     .login-subtitle {
       font-family: 'Lato', sans-serif;
-      color: var(--text-light);
+      color: var(--text-secondary);
       font-size: 1rem;
       font-weight: 400;
     }
@@ -136,7 +173,7 @@
     .form-label {
       font-family: 'Poppins', sans-serif;
       font-weight: 500;
-      color: var(--text-dark);
+      color: var(--text-primary);
       margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
@@ -144,41 +181,47 @@
     }
 
     .form-label i {
-      color: var(--accent-green);
+      color: var(--primary-color);
       font-size: 0.9rem;
     }
 
     .form-control {
-      border: 2px solid #e9ecef;
-      border-radius: 12px;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
       padding: 0.75rem 1rem;
       font-family: 'Lato', sans-serif;
       font-size: 1rem;
       transition: all 0.3s ease;
-      background: #fafafa;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-muted);
     }
 
     .form-control:focus {
-      border-color: var(--accent-green);
-      box-shadow: 0 0 0 0.2rem rgba(168, 202, 186, 0.25);
-      background: var(--white);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(225, 242, 31, 0.25);
+      background: var(--card-dark);
       transform: translateY(-2px);
+      outline: none;
     }
 
     .form-control:hover {
-      border-color: var(--soft-green);
+      border-color: var(--primary-dark);
       transform: translateY(-1px);
     }
 
     .btn-login {
-      background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+      background: var(--primary-color);
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 0.875rem 2rem;
       font-family: 'Poppins', sans-serif;
       font-weight: 600;
       font-size: 1.1rem;
-      color: var(--white);
+      color: var(--bg-dark);
       width: 100%;
       transition: all 0.3s ease;
       position: relative;
@@ -192,7 +235,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
       transition: left 0.5s;
     }
 
@@ -202,8 +245,8 @@
 
     .btn-login:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(45, 80, 22, 0.3);
-      background: linear-gradient(135deg, var(--light-green), var(--accent-green));
+      box-shadow: 0 10px 25px rgba(225, 242, 31, 0.3);
+      background: var(--primary-dark);
     }
 
     .btn-login:active {
@@ -211,22 +254,33 @@
     }
 
     .alert {
-      border-radius: 12px;
+      border-radius: 8px;
       border: none;
       font-family: 'Lato', sans-serif;
       animation: shake 0.5s ease-in-out;
+      margin-bottom: 1.5rem;
     }
 
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      75% {
+        transform: translateX(5px);
+      }
     }
 
     .alert-danger {
-      background: linear-gradient(135deg, #ffebee, #fce4ec);
-      color: #c62828;
-      border-left: 4px solid #e57373;
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border-left: 4px solid var(--danger);
     }
 
     .floating-elements {
@@ -241,9 +295,9 @@
 
     .floating-element {
       position: absolute;
-      background: var(--soft-green);
+      background: var(--primary-color);
       border-radius: 50%;
-      opacity: 0.1;
+      opacity: 0.05;
       animation: floatAround 15s linear infinite;
     }
 
@@ -272,9 +326,36 @@
     }
 
     @keyframes floatAround {
-      0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(180deg); }
-      100% { transform: translateY(0px) rotate(360deg); }
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+      }
+
+      100% {
+        transform: translateY(0px) rotate(360deg);
+      }
+    }
+
+    /* Animation */
+    .login-card {
+      animation: fadeInUp 0.8s ease-out;
+      animation-fill-mode: both;
+      opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Responsive Design */
@@ -283,18 +364,29 @@
         margin: 1rem;
         padding: 2rem 1.5rem;
       }
-      
+
       .login-title {
         font-size: 1.5rem;
       }
-      
+
       .login-icon {
         width: 70px;
         height: 70px;
       }
-      
+
       .login-icon i {
         font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        margin: 0.5rem;
+        padding: 1.5rem 1rem;
+      }
+
+      .login-title {
+        font-size: 1.3rem;
       }
     }
 
@@ -310,7 +402,7 @@
       width: 20px;
       height: 20px;
       border: 2px solid transparent;
-      border-top: 2px solid white;
+      border-top: 2px solid var(--bg-dark);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       top: 50%;
@@ -319,18 +411,45 @@
     }
 
     @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    .form-text {
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      font-family: 'Lato', sans-serif;
+      line-height: 1.4;
+    }
+
+    .form-text i {
+      color: var(--primary-color);
+      font-size: 0.8rem;
+    }
+
+    /* Focus animations for form groups */
+    .form-group {
+      transition: transform 0.3s ease;
+    }
+
+    .form-group:focus-within {
+      transform: scale(1.02);
     }
   </style>
 </head>
+
 <body>
   <div class="floating-elements">
     <div class="floating-element"></div>
     <div class="floating-element"></div>
     <div class="floating-element"></div>
   </div>
-  
+
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-4">
@@ -342,13 +461,13 @@
             <h3 class="login-title">Sistem Qurban</h3>
             <p class="login-subtitle">Masuk ke akun Anda</p>
           </div>
-          
+
           <!-- Simulasi PHP error message -->
           <!-- <div class="alert alert-danger">
             <i class="fas fa-exclamation-circle me-2"></i>
             NIK atau password salah!
           </div> -->
-          
+
           <form action="auth/login.php" method="POST" id="loginForm">
             <div class="form-group">
               <label for="nik" class="form-label">
@@ -357,15 +476,19 @@
               </label>
               <input type="text" class="form-control" id="nik" name="nik" required placeholder="Masukkan NIK Anda">
             </div>
-            
+
             <div class="form-group">
               <label for="password" class="form-label">
                 <i class="fas fa-lock"></i>
                 Kata Sandi
               </label>
               <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi">
+              <small class="form-text text-light mt-1 fs-12">
+                <i class="fas fa-info-circle me-1"></i>
+                Password default: NIK + 123 
+              </small>
             </div>
-            
+
             <button type="submit" class="btn btn-login">
               <i class="fas fa-sign-in-alt me-2"></i>
               Masuk
@@ -390,11 +513,24 @@
       input.addEventListener('focus', function() {
         this.parentElement.style.transform = 'scale(1.02)';
       });
-      
+
       input.addEventListener('blur', function() {
         this.parentElement.style.transform = 'scale(1)';
       });
     });
+
+    // Add hover effect to login card
+    const loginCard = document.querySelector('.login-card');
+    loginCard.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-4px)';
+      this.style.boxShadow = '0 25px 50px rgba(225, 242, 31, 0.15)';
+    });
+
+    loginCard.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+    });
   </script>
 </body>
+
 </html>
