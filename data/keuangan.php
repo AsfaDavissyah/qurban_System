@@ -428,7 +428,7 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
 </style>
 <div class="container">
     <div class="page-header">
-        <h4>Data Keuangan Qurban</h4>
+        <h4><i class="fas fa-money-bill-wave"></i> Data Keuangan Qurban</h4>
         <div class="header-actions">
             <a href="input_keuangan.php" class="btn-success">+ Tambah Transaksi</a>
         </div>

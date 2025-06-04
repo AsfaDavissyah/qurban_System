@@ -55,7 +55,7 @@ $result = $conn->query($sql);
     }
 
     h4 i {
-        color: #e1f21f;
+        color: #ffffff;
         font-size: 1.5rem;
     }
 
@@ -221,7 +221,7 @@ $result = $conn->query($sql);
     .currency {
         font-weight: 600;
         color: #e1f21f !important;
-        font-family: 'Courier New', monospace;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
 
     /* Button Styles */
@@ -364,8 +364,13 @@ $result = $conn->query($sql);
 </style>
 
 <div class="container mt-4">
-    <h4>Data Peserta Qurban</h4>
-
+    <div class="page-header">
+        <h4><i class="fas fa-person"></i> Data Peserta Qurban</h4>
+        <div class="header-actions">
+            <!-- Add button if needed -->
+        </div>
+    </div>
+    
     <?php
     // Hitung statistik
     $total_peserta = $result->num_rows;
@@ -409,7 +414,7 @@ $result = $conn->query($sql);
 
         <div class="stat-card">
             <div class="stat-icon">
-                <i class="fas fa-sheep"></i>
+                <i class="fas fa-fish"></i>
             </div>
             <div class="stat-number"><?= $jenis_count['kambing'] ?></div>
             <div class="stat-label">Peserta Kambing</div>
@@ -435,7 +440,7 @@ $result = $conn->query($sql);
                                 <td><?= htmlspecialchars($row['nik']) ?></td>
                                 <td>
                                     <span class="hewan-badge hewan-<?= strtolower($row['jenis']) ?>">
-                                        <i class="fas fa-<?= $row['jenis'] == 'sapi' ? 'cow' : 'sheep' ?>"></i>
+                                        <i class="fas fa-<?= $row['jenis'] == 'sapi' ? 'cow' : 'fish' ?>"></i>
                                         <?= ucfirst($row['jenis']) ?>
                                     </span>
                                 </td>
