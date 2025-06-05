@@ -26,6 +26,9 @@ if (!$is_admin_or_panitia && $target_nik !== $current_nik) {
     exit;
 }
 
+// Cek jika ada parameter download
+$is_download = isset($_GET['download']) && $_GET['download'] == '1';
+
 // Ambil data lengkap user dan pembagian daging
 $stmt = $conn->prepare("
     SELECT u.nik, u.nama, u.alamat, u.telepon, u.is_panitia, u.is_berqurban, u.role,
@@ -96,6 +99,33 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
     $qr_path = $nik . ".png";
     $update_qr->bind_param("ss", $qr_path, $nik);
     $update_qr->execute();
+}
+
+// Jika ini adalah request download, update status dan kirim file
+if ($is_download) {
+    // Update status menjadi 'sudah_ambil' hanya jika masih 'belum_ambil'
+    if ($status_pengambilan == 'belum_ambil') {
+        $update_status = $conn->prepare("UPDATE pembagian_daging SET status = 'sudah_ambil' WHERE nik = ?");
+        $update_status->bind_param("s", $nik);
+        $update_status->execute();
+
+        // Update status untuk tampilan
+        $status_pengambilan = 'sudah_ambil';
+    }
+
+    // Kirim file untuk download
+    if (file_exists($filename)) {
+        header('Content-Type: image/png');
+        header('Content-Disposition: attachment; filename="QR_' . $nama . '_' . $nik . '.png"');
+        header('Content-Length: ' . filesize($filename));
+
+        // Baca dan kirim file
+        readfile($filename);
+        exit;
+    } else {
+        echo "<script>alert('File QR Code tidak ditemukan!'); window.history.back();</script>";
+        exit;
+    }
 }
 
 ?>
@@ -215,6 +245,7 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
             gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -240,6 +271,18 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
             color: #000;
         }
 
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-2px);
+            color: white;
+        }
+
         .btn-secondary {
             background-color: #6c757d;
             color: white;
@@ -261,6 +304,16 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
             border: 1px solid rgba(225, 242, 31, 0.3);
         }
 
+        .download-notice {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(40, 167, 69, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: #28a745;
+        }
+
         @media print {
             body {
                 background-color: white !important;
@@ -274,6 +327,16 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
 
             .btn-group {
                 display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
             }
         }
     </style>
@@ -346,10 +409,25 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
                 <strong>Petunjuk:</strong> Tunjukkan QR Code ini kepada panitia saat pengambilan daging qurban
             </div>
 
+            <?php if ($status_pengambilan == 'sudah_ambil'): ?>
+                <div class="download-notice">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>Status:</strong> QR Code sudah pernah didownload dan status telah diperbarui menjadi "Sudah Ambil"
+                </div>
+            <?php endif; ?>
+
             <div class="btn-group">
                 <button onclick="window.print()" class="btn btn-primary">
                     <i class="fas fa-print"></i> Print QR Code
                 </button>
+
+                <a href="?<?= http_build_query(array_merge($_GET, ['download' => '1'])) ?>" class="btn btn-success">
+                    <i class="fas fa-download"></i> Download QR Code
+                    <?php if ($status_pengambilan == 'belum_ambil'): ?>
+                        <!-- <small style="font-size: 0.8em; display: block;">(Status akan berubah)</small> -->
+                    <?php endif; ?>
+                </a>
+
                 <?php
                 $is_panitia = $_SESSION['is_panitia'] ?? false;
                 $role = $_SESSION['role'] ?? '';
@@ -366,8 +444,6 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
                 <a href="<?= $back_link ?>" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Kembali
                 </a>
-
-
             </div>
         </div>
     </div>
@@ -379,6 +455,16 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('print') === '1') {
                 window.print();
+            }
+
+            // Konfirmasi download jika status masih belum_ambil
+            const downloadBtn = document.querySelector('a[href*="download=1"]');
+            if (downloadBtn && <?= $status_pengambilan == 'belum_ambil' ? 'true' : 'false' ?>) {
+                downloadBtn.addEventListener('click', function(e) {
+                    if (!confirm('Download QR Code akan mengubah status menjadi "Sudah Ambil". Lanjutkan?')) {
+                        e.preventDefault();
+                    }
+                });
             }
         });
     </script>

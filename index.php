@@ -462,12 +462,6 @@
             <p class="login-subtitle">Masuk ke akun Anda</p>
           </div>
 
-          <!-- Simulasi PHP error message  -->
-          <div class="alert alert-danger">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            NIK atau password salah!
-          </div> 
-
           <form action="auth/login.php" method="POST" id="loginForm">
             <div class="form-group">
               <label for="nik" class="form-label">
