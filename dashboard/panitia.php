@@ -348,7 +348,7 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
                 Akses Personal
             </h3>
             <div class="menu-grid single-column">
-                <a href="../data/pembagian_daging.php" class="menu-card personal-qr-card">
+                <a href="../data/qr_generator.php" class="menu-card personal-qr-card">
                     <div class="menu-icon">
                         <i class="fas fa-qrcode"></i>
                     </div>

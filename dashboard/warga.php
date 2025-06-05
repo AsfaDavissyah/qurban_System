@@ -251,7 +251,7 @@ if (!isset($_SESSION['nik'])) {
 
         <!-- Menu Grid -->
         <div class="menu-grid">
-            <a href="../data/pembagian_daging.php" class="menu-card">
+            <a href="../data/qr_generator.php" class="menu-card">
                 <div class="menu-icon">
                     <i class="fas fa-qrcode"></i>
                 </div>
