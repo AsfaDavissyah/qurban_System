@@ -15,7 +15,7 @@
       --card-dark: #1e1e1e;
       --border-dark: #2a2a2a;
       --text-primary: #ffffff;
-      --text-secondary:rgb(252, 252, 252);
+      --text-secondary: rgb(252, 252, 252);
       --text-muted: #808080;
       --success: #10b981;
       --danger: #ef4444;
@@ -440,6 +440,26 @@
     .form-group:focus-within {
       transform: scale(1.02);
     }
+
+    input.form-control {
+      background-color: var(--card-dark);
+      color: var(--text-primary);
+      border: 2px solid var(--primary-color);
+      box-shadow: 0 0 5px var(--primary-color);
+    }
+
+    input.form-control::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
   </style>
 </head>
 
@@ -476,10 +496,10 @@
                 <i class="fas fa-lock "></i>
                 Kata Sandi
               </label>
-              <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi">
+              <input type="text" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi">
               <small class="form-text text-light mt-1 fs-12">
-                <i class="fas fa-info-circle me-1"></i>
-                Password default: NIK + 123 
+                <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                Password default: NIK + 123
               </small>
             </div>
 
@@ -525,6 +545,16 @@
       this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
     });
   </script>
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+  </script>
+
 </body>
 
 </html>
