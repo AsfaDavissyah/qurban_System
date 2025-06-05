@@ -162,7 +162,7 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
 
     .form-label {
         font-weight: 600;
-        color: #b3b3b3;
+        color: #ffffff;
         margin-bottom: 0.5rem;
         display: block;
         font-size: 0.9rem;
@@ -565,6 +565,12 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    input.form-control::placeholder {
+        color: #b3b3b3; /* warna abu-abu */
+
+        /* warna kuning cerah */
     }
 </style>
 
