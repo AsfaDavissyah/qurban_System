@@ -443,14 +443,18 @@
 
     input.form-control {
       background-color: var(--card-dark);
-      color: var(--text-primary);
+      color: var(--text-primary) !important;
+      /* putih atau kuning terang */
       border: 2px solid var(--primary-color);
       box-shadow: 0 0 5px var(--primary-color);
+
     }
 
     input.form-control::placeholder {
-      color: var(--text-secondary);
+      color: var(--text-muted);
+      /* warna kuning cerah */
     }
+
 
     .toggle-password {
       position: absolute;
