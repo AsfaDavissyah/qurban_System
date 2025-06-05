@@ -34,6 +34,7 @@
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+      overflow: hidden;
     }
 
     body::before {
