@@ -501,7 +501,7 @@
                 <i class="fas fa-lock "></i>
                 Kata Sandi
               </label>
-              <input type="text" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi">
+              <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi">
               <small class="form-text text-light mt-1 fs-12">
                 <i class="fas fa-eye toggle-password" id="togglePassword"></i>
                 Password default: NIK + 123
@@ -553,7 +553,7 @@
   <script>
     document.getElementById('togglePassword').addEventListener('click', function() {
       const passwordInput = document.getElementById('password');
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      const type = passwordInput.getAttribute('type') === 'password' ? 'type' : 'password';
       passwordInput.setAttribute('type', type);
       this.classList.toggle('fa-eye');
       this.classList.toggle('fa-eye-slash');
