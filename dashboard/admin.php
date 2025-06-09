@@ -21,7 +21,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
         padding: 0 1rem;
     }
 
-    /* Header Section */
     .dashboard-header {
         text-align: center;
         margin-bottom: 4rem;
@@ -42,7 +41,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
         margin-bottom: 0;
     }
 
-    /* Dashboard Grid */
     .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -50,7 +48,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
         margin-bottom: 3rem;
     }
 
-    /* Menu Card */
     .menu-card {
         background: #1e1e1e;
         border-radius: 12px;
@@ -132,7 +129,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
         margin: 0;
     }
 
-    /* Logout Section */
     .logout-section {
         text-align: center;
         padding-top: 2rem;
@@ -162,7 +158,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    /* Animation */
     .menu-card {
         animation: fadeInUp 0.6s ease-out;
         animation-fill-mode: both;
@@ -198,7 +193,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
         }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .dashboard-container {
             padding: 0 1rem;
@@ -235,13 +229,11 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
 
 <div class="content-area">
     <div class="dashboard-container">
-        <!-- Header Section -->
         <div class="dashboard-header">
             <h1>Dashboard Admin</h1>
             <p class="subtitle">Kelola seluruh sistem qurban dengan mudah</p>
         </div>
 
-        <!-- Dashboard Grid -->
         <div class="dashboard-grid">
             <a href="../data/users.php" class="menu-card">
                 <div class="menu-icon">
@@ -284,7 +276,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
             </a>
         </div>
 
-        <!-- Logout Section -->
         <div class="logout-section">
             <a href="../auth/logout.php" class="btn-logout">
                 <i class="fas fa-sign-out-alt"></i>

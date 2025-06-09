@@ -340,7 +340,6 @@
       }
     }
 
-    /* Animation */
     .login-card {
       animation: fadeInUp 0.8s ease-out;
       animation-fill-mode: both;
@@ -359,7 +358,6 @@
       }
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
       .login-card {
         margin: 1rem;
@@ -391,7 +389,6 @@
       }
     }
 
-    /* Loading state for button */
     .btn-login.loading {
       pointer-events: none;
       position: relative;
@@ -433,7 +430,6 @@
       font-size: 0.8rem;
     }
 
-    /* Focus animations for form groups */
     .form-group {
       transition: transform 0.3s ease;
     }
@@ -445,7 +441,6 @@
     input.form-control {
       background-color: var(--card-dark);
       color: var(--text-primary) !important;
-      /* putih atau kuning terang */
       border: 2px solid var(--primary-color);
       box-shadow: 0 0 5px var(--primary-color);
 
@@ -453,7 +448,6 @@
 
     input.form-control::placeholder {
       color: var(--text-muted);
-      /* warna kuning cerah */
     }
 
 
@@ -520,14 +514,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Add loading state to button on form submit
     document.getElementById('loginForm').addEventListener('submit', function() {
       const btn = document.querySelector('.btn-login');
       btn.classList.add('loading');
       btn.innerHTML = '<span style="opacity: 0;">Memproses...</span>';
     });
 
-    // Add focus animations
     document.querySelectorAll('.form-control').forEach(input => {
       input.addEventListener('focus', function() {
         this.parentElement.style.transform = 'scale(1.02)';
@@ -538,7 +530,6 @@
       });
     });
 
-    // Add hover effect to login card
     const loginCard = document.querySelector('.login-card');
     loginCard.addEventListener('mouseenter', function() {
       this.style.transform = 'translateY(-4px)';

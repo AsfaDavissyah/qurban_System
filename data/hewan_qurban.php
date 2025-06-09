@@ -2,7 +2,6 @@
 require_once '../config/db.php';
 if ($_SESSION['role'] !== 'admin') exit;
 
-// Handle form submission
 if (
     isset($_POST['action']) &&
     $_POST['action'] === 'tambah' &&
@@ -24,7 +23,6 @@ if (
     }
 }
 
-// Handle delete action
 if (
     isset($_POST['action']) &&
     $_POST['action'] === 'hapus' &&
@@ -67,7 +65,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         padding: 2rem 1rem;
     }
 
-    /* Header Section */
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -93,7 +90,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         align-items: center;
     }
 
-    /* Buttons */
     .btn-success {
         background: #e1f21f;
         color: #121212;
@@ -137,7 +133,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         border-color: #555555;
     }
 
-    /* Form Section */
     .form-section {
         background: #1e1e1e;
         border-radius: 12px;
@@ -209,7 +204,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         text-align: center;
     }
 
-    /* Alert Messages */
     .alert {
         border-radius: 8px;
         padding: 1rem 1.25rem;
@@ -232,7 +226,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         border-color: rgba(239, 68, 68, 0.3);
     }
 
-    /* Statistics Cards */
     .stats-row {
         display: flex;
         gap: 20px;
@@ -305,7 +298,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         opacity: 0.8;
     }
 
-    /* Different colors and accents for different stats */
     .stat-card:nth-child(1) {
         --stat-color: #e1f21f;
         --card-accent: #e1f21f;
@@ -342,7 +334,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         color: #ffc107;
     }
 
-    /* Table Styling */
     .table-container {
         background: #1e1e1e;
         border-radius: 12px;
@@ -388,7 +379,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         border-bottom: none;
     }
 
-    /* Animal Type Badges */
     .animal-badge {
         padding: 0.4rem 0.8rem;
         border-radius: 20px;
@@ -442,7 +432,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         border: 1px solid rgba(108, 117, 125, 0.3);
     }
 
-    /* Action Buttons */
     .action-buttons {
         display: flex;
         gap: 0.5rem;
@@ -477,7 +466,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         transform: scale(1.05);
     }
 
-    /* Empty State */
     .empty-state {
         text-align: center;
         padding: 3rem 1rem;
@@ -490,7 +478,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         margin-bottom: 1rem;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .container {
             padding: 1rem;
@@ -548,7 +535,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         }
     }
 
-    /* Animation */
     .form-section,
     .table-container,
     .stats-row {
@@ -568,9 +554,8 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
     }
 
     input.form-control::placeholder {
-        color: #b3b3b3; /* warna abu-abu */
+        color: #b3b3b3; 
 
-        /* warna kuning cerah */
     }
 </style>
 
@@ -578,11 +563,9 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
     <div class="page-header">
         <h4><i class="fas fa-cow"></i> Manajemen Hewan Qurban</h4>
         <div class="header-actions">
-            <!-- Add button if needed -->
         </div>
     </div>
 
-    <!-- Alert Messages -->
     <?php if (isset($success_message)): ?>
         <div class="alert alert-success">
             <i class="fas fa-check-circle"></i>
@@ -597,7 +580,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         </div>
     <?php endif; ?>
 
-    <!-- Form Section -->
     <div class="form-section">
         <h3 class="form-title"><i class="fas fa-plus-circle"></i> Tambah Hewan Qurban Baru</h3>
         <form method="POST" action="">
@@ -643,7 +625,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
     </div>
 
     <?php
-    // Calculate statistics
     $result_stats = $conn->query("SELECT 
         COUNT(*) as total_entries,
         SUM(jumlah) as total_animals,
@@ -653,7 +634,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
     $stats = $result_stats->fetch_assoc();
     ?>
 
-    <!-- Statistics -->
     <div class="stats-row">
         <div class="stat-card">
             <div class="stat-number">
@@ -689,7 +669,6 @@ $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");
         </div>
     </div>
 
-    <!-- Data Table -->
     <div class="table-container">
         <?php
         $result = $conn->query("SELECT * FROM hewan_qurban ORDER BY tanggal DESC");

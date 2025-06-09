@@ -14,10 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jumlah_iuran = $_POST['jumlah_iuran'];
 
     try {
-        // Start transaction
         $conn->begin_transaction();
 
-        // Validate user
         $check_user_stmt = $conn->prepare("SELECT nik, nama, is_berqurban FROM users WHERE nik = ?");
         $check_user_stmt->bind_param("s", $nik);
         $check_user_stmt->execute();
@@ -33,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("User is not marked as berqurban");
         }
 
-        // Check if already processed
         $check_processed_stmt = $conn->prepare("SELECT id FROM qurban_peserta WHERE nik = ?");
         $check_processed_stmt->bind_param("s", $nik);
         $check_processed_stmt->execute();
@@ -43,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("User already processed");
         }
 
-        // Insert into qurban_peserta
         $insert_stmt = $conn->prepare("INSERT INTO qurban_peserta (nik, hewan_id, jumlah_iuran) VALUES (?, ?, ?)");
         $insert_stmt->bind_param("sii", $nik, $hewan_id, $jumlah_iuran);
 
@@ -59,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Gagal mencatat keuangan");
         }
 
-        // Commit transaction
         $conn->commit();
 
         header("Location: users.php?success=processed");
@@ -70,12 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get user data if NIK is provided
 $user_data = null;
 if (isset($_GET['nik'])) {
     $nik = $_GET['nik'];
 
-    // Get user data
     $user_stmt = $conn->prepare("SELECT * FROM users WHERE nik = ? AND is_berqurban = 1");
     $user_stmt->bind_param("s", $nik);
     $user_stmt->execute();
@@ -84,7 +77,6 @@ if (isset($_GET['nik'])) {
     if ($user_result->num_rows > 0) {
         $user_data = $user_result->fetch_assoc();
 
-        // Check if already processed
         $check_stmt = $conn->prepare("SELECT id FROM qurban_peserta WHERE nik = ?");
         $check_stmt->bind_param("s", $nik);
         $check_stmt->execute();
@@ -100,7 +92,6 @@ if (isset($_GET['nik'])) {
     }
 }
 
-// Get available hewan qurban - Updated query with admin fee calculation
 $hewan_qurban = $conn->query("
     SELECT 
         hq.id,
@@ -482,10 +473,8 @@ $hewan_qurban = $conn->query("
 
             console.log('Found hewan options:', hewanOptions.length);
 
-            // Select first option by default
             if (hewanOptions.length > 0) {
                 hewanOptions[0].classList.add('selected');
-                // Set default values
                 selectedHewanInput.value = hewanOptions[0].getAttribute('data-id') || '';
                 jumlahIuranInput.value = hewanOptions[0].getAttribute('data-iuran') || '150000';
             }
@@ -504,15 +493,12 @@ $hewan_qurban = $conn->query("
 
                     console.log('Clicked option:', this);
 
-                    // Remove selected class from all options
                     hewanOptions.forEach(opt => {
                         opt.classList.remove('selected');
                     });
 
-                    // Add selected class to clicked option
                     this.classList.add('selected');
 
-                    // Set hidden input values
                     const hewanId = this.getAttribute('data-id') || '';
                     const totalIuran = this.getAttribute('data-iuran') || '150000';
 
@@ -531,7 +517,6 @@ $hewan_qurban = $conn->query("
                 });
             });
 
-            // Debug form submission
             const form = document.getElementById('processForm');
             if (form) {
                 form.addEventListener('submit', function(e) {

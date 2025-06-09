@@ -13,7 +13,6 @@ $result = $conn->query($sql);
 <?php include '../template/header.php'; ?>
 
 <style>
-    /* Base Styles */
     * {
         margin: 0;
         padding: 0;
@@ -34,7 +33,6 @@ $result = $conn->query($sql);
         padding: 2rem 1rem;
     }
 
-    /* Page Header */
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -59,7 +57,6 @@ $result = $conn->query($sql);
         font-size: 1.5rem;
     }
 
-    /* Statistics Cards */
     .stats-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -103,7 +100,6 @@ $result = $conn->query($sql);
         letter-spacing: 0.5px;
     }
 
-    /* Table Container */
     .table-container {
         background: #1e1e1e;
         border-radius: 12px;
@@ -114,7 +110,6 @@ $result = $conn->query($sql);
         animation: fadeInUp 0.6s ease-out;
     }
 
-    /* Table Styles */
     .table {
         color: #ffffff;
         margin: 0;
@@ -142,7 +137,6 @@ $result = $conn->query($sql);
         text-align: center;
     }
 
-    /* Add icons to table headers */
     .table thead th:nth-child(1)::before {
         content: '\f007';
         font-family: 'Font Awesome 6 Free';
@@ -193,7 +187,6 @@ $result = $conn->query($sql);
         border-bottom: none;
     }
 
-    /* Jenis Hewan Badges */
     .hewan-badge {
         display: inline-flex;
         align-items: center;
@@ -217,14 +210,12 @@ $result = $conn->query($sql);
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Currency Formatting */
     .currency {
         font-weight: 600;
         color: #e1f21f !important;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
 
-    /* Button Styles */
     .btn {
         display: inline-flex;
         align-items: center;
@@ -261,7 +252,6 @@ $result = $conn->query($sql);
         font-weight: 900;
     }
 
-    /* Empty State */
     .empty-state {
         text-align: center;
         padding: 3rem 1rem;
@@ -285,7 +275,6 @@ $result = $conn->query($sql);
         font-size: 1rem;
     }
 
-    /* Animation */
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -297,7 +286,6 @@ $result = $conn->query($sql);
         }
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
         .container {
             padding: 1rem;
@@ -347,13 +335,11 @@ $result = $conn->query($sql);
         }
     }
 
-    /* Focus States untuk Accessibility */
     *:focus {
         outline: 2px solid #e1f21f;
         outline-offset: 2px;
     }
 
-    /* Text Center untuk action buttons */
     .text-center {
         text-align: center;
     }
@@ -367,26 +353,22 @@ $result = $conn->query($sql);
     <div class="page-header">
         <h4><i class="fas fa-person"></i> Data Peserta Qurban</h4>
         <div class="header-actions">
-            <!-- Add button if needed -->
         </div>
     </div>
     
     <?php
-    // Hitung statistik
     $total_peserta = $result->num_rows;
     $total_iuran = 0;
     $jenis_count = ['sapi' => 0, 'kambing' => 0];
 
-    // Reset pointer dan hitung statistik
     $result->data_seek(0);
     while ($row = $result->fetch_assoc()) {
         $total_iuran += $row['jumlah_iuran'];
         $jenis_count[strtolower($row['jenis'])]++;
     }
-    $result->data_seek(0); // Reset lagi untuk tampilan tabel
+    $result->data_seek(0); 
     ?>
 
-    <!-- Statistics Cards -->
     <div class="stats-container">
         <div class="stat-card">
             <div class="stat-icon">

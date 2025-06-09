@@ -2,7 +2,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '';
-$dbname = 'db_kurban'; // ganti sesuai nama database kamu
+$dbname = 'db_kurban'; 
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 

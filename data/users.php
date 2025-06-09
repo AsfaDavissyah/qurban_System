@@ -30,7 +30,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         padding: 2rem 1rem;
     }
 
-    /* Header Section */
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -53,7 +52,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         align-items: center;
     }
 
-    /* Buttons */
     .btn-success {
         background: #e1f21f;
         color: #121212;
@@ -97,7 +95,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         border-color: #555555;
     }
 
-    /* Table Styling */
     .table-container {
         background: #1e1e1e;
         border-radius: 12px;
@@ -142,7 +139,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         border-bottom: none;
     }
 
-    /* Action Buttons */
     .action-buttons {
         display: flex;
         gap: 0.5rem;
@@ -212,7 +208,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         transform: none;
     }
 
-    /* Status Badges */
     .badge {
         padding: 0.4rem 0.8rem;
         border-radius: 20px;
@@ -234,7 +229,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         border: 1px solid rgba(107, 114, 128, 0.3);
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .container {
             padding: 1rem;
@@ -274,13 +268,11 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         }
     }
 
-    /* Loading States */
     .table tbody tr.loading {
         opacity: 0.6;
         pointer-events: none;
     }
 
-    /* Empty State */
     .empty-state {
         text-align: center;
         padding: 3rem 1rem;
@@ -293,7 +285,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         margin-bottom: 1rem;
     }
 
-    /* Animation */
     .table-container {
         animation: fadeInUp 0.6s ease-out;
     }
@@ -310,7 +301,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         }
     }
 
-    /* Alert Styles */
     .alert {
         padding: 1rem;
         margin-bottom: 1rem;
@@ -334,7 +324,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
 
 <body>
     <div class="container">
-        <!-- Alert Messages -->
         <?php if (isset($_GET['success'])): ?>
             <div class="alert alert-success">
                 <i class="fas fa-check-circle me-2"></i>
@@ -391,7 +380,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             </div>
         <?php endif; ?>
 
-        <!-- Page Header -->
         <div class="page-header">
             <h4><i class="fas fa-users me-2"></i>Data Warga</h4>
             <div class="header-actions">
@@ -402,7 +390,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             </div>
         </div>
 
-        <!-- Table Container -->
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table">
@@ -418,7 +405,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
                     </thead>
                     <tbody>
                         <?php
-                        // Check which users are already processed in qurban_peserta
                         $processed_users = [];
                         $processed_result = $conn->query("SELECT nik FROM qurban_peserta");
                         while ($processed_row = $processed_result->fetch_assoc()) {
@@ -470,7 +456,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             </div>
         </div>
 
-        <!-- Back Button -->
         <div class="d-flex justify-content-start">
             <a href="../dashboard/admin.php" class="btn-secondary">
                 <i class="fas fa-arrow-left"></i>
@@ -479,35 +464,29 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
         function confirmDelete(nik, nama) {
             if (confirm(`Apakah Anda yakin ingin menghapus data warga "${nama}" dengan NIK ${nik}?\n\nData yang dihapus tidak dapat dikembalikan dan akan menghapus semua data terkait (qurban, hewan, dll).`)) {
-                // Show loading indicator
                 const button = event.target.closest('.btn-delete');
                 const originalContent = button.innerHTML;
                 button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
                 button.style.pointerEvents = 'none';
 
-                // Redirect to improved delete script
                 window.location.href = `delete_user.php?nik=${encodeURIComponent(nik)}`;
             }
         }
 
         function confirmProcess(nik, nama) {
             if (confirm(`Apakah Anda yakin ingin memproses data warga "${nama}" ke daftar peserta qurban?\n\nData akan ditambahkan ke tabel qurban_peserta.`)) {
-                // Show loading state
                 const row = event.target.closest('tr');
                 addLoadingState(row);
 
-                // Redirect to process script
                 window.location.href = `process_qurban.php?nik=${encodeURIComponent(nik)}`;
             }
         }
 
-        // Optional: Add loading state when performing actions
         function addLoadingState(row) {
             row.classList.add('loading');
         }
@@ -516,7 +495,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             row.classList.remove('loading');
         }
 
-        // Auto hide alerts after 5 seconds
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
@@ -528,7 +506,6 @@ $result = $conn->query("SELECT * FROM users ORDER BY nama");
             });
         }, 5000);
 
-        // Prevent double-click on action buttons
         document.querySelectorAll('.btn-action').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 setTimeout(() => {

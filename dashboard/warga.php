@@ -21,7 +21,6 @@ if (!isset($_SESSION['nik'])) {
         padding: 0 1rem;
     }
 
-    /* Welcome Section */
     .welcome-section {
         background: #1e1e1e;
         border-radius: 12px;
@@ -72,7 +71,6 @@ if (!isset($_SESSION['nik'])) {
         margin: 0;
     }
 
-    /* Menu Cards */
     .menu-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -154,7 +152,6 @@ if (!isset($_SESSION['nik'])) {
         margin: 0;
     }
 
-    /* Logout Section */
     .logout-section {
         text-align: center;
         padding-top: 2rem;
@@ -184,7 +181,6 @@ if (!isset($_SESSION['nik'])) {
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    /* Animation */
     .welcome-section {
         animation: fadeIn 0.6s ease-out;
     }
@@ -213,7 +209,6 @@ if (!isset($_SESSION['nik'])) {
         to { opacity: 1; }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .dashboard-container {
             padding: 0 1rem;
@@ -240,7 +235,6 @@ if (!isset($_SESSION['nik'])) {
 
 <div class="content-area">
     <div class="dashboard-container">
-        <!-- Welcome Section -->
         <div class="welcome-section">
             <div class="welcome-icon">
                 <i class="fas fa-user"></i>
@@ -249,7 +243,6 @@ if (!isset($_SESSION['nik'])) {
             <p class="welcome-subtitle">Selamat datang di sistem informasi qurban</p>
         </div>
 
-        <!-- Menu Grid -->
         <div class="menu-grid">
             <a href="../data/qr_generator.php" class="menu-card">
                 <div class="menu-icon">
@@ -268,7 +261,6 @@ if (!isset($_SESSION['nik'])) {
             <?php endif; ?>
         </div>
 
-        <!-- Logout Section -->
         <div class="logout-section">
             <a href="../auth/logout.php" class="btn-logout">
                 <i class="fas fa-sign-out-alt"></i>

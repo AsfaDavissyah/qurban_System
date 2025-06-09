@@ -5,7 +5,6 @@ if (!isset($_SESSION['nik']) || (!$_SESSION['is_panitia'] && $_SESSION['role'] !
     exit;
 }
 
-// Proses submit form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tanggal = $_POST['tanggal'];
     $jenis = $_POST['jenis'];
@@ -47,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 2rem 1rem;
         }
 
-        /* Header Section */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -64,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
         }
 
-        /* Form Container */
         .form-container {
             background: #1e1e1e;
             border-radius: 12px;
@@ -74,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             animation: fadeInUp 0.6s ease-out;
         }
 
-        /* Alert Styling */
         .alert {
             border: none;
             border-radius: 8px;
@@ -95,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
-        /* Form Labels */
         .form-label {
             color: #ffffff;
             font-weight: 600;
@@ -104,7 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 0.9rem;
         }
 
-        /* Form Controls */
         .form-control,
         .form-select {
             background: #2a2a2a;
@@ -133,12 +127,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #ffffff;
         }
 
-        /* Form Group Spacing */
         .row.g-3 > * {
             margin-bottom: 1.5rem;
         }
 
-        /* Button Styling */
         .btn {
             border: none;
             padding: 0.75rem 1.5rem;
@@ -176,7 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-color: #555555;
         }
 
-        /* Button Icons */
         .btn-primary::before {
             content: "\f0c7";
             font-family: "Font Awesome 6 Free";
@@ -189,7 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 900;
         }
 
-        /* Form Actions */
         .form-actions {
             display: flex;
             gap: 1rem;
@@ -197,7 +187,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-top: 1px solid #2a2a2a;
         }
 
-        /* Input Icons */
         .input-group {
             position: relative;
         }
@@ -215,7 +204,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding-left: 2.5rem;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -239,7 +227,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        /* Animation */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -251,7 +238,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        /* Form Validation */
         .form-control:invalid {
             border-color: #ef4444;
         }
@@ -260,13 +246,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-color: #22c55e;
         }
 
-        /* Loading State */
         .btn:disabled {
             opacity: 0.6;
             pointer-events: none;
         }
 
-        /* Custom Select Arrow */
         .form-select {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23e1f21f' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 6 6 6-6'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
@@ -356,10 +340,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <script>
-        // Auto set today's date
         document.getElementById('tanggal').valueAsDate = new Date();
         
-        // Form validation feedback
         const forms = document.querySelectorAll('form');
         forms.forEach(form => {
             form.addEventListener('submit', function(e) {
@@ -371,10 +353,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
         
-        // Number formatting for jumlah input
         const jumlahInput = document.getElementById('jumlah');
         jumlahInput.addEventListener('input', function(e) {
-            // Remove non-digits
             let value = e.target.value.replace(/\D/g, '');
             e.target.value = value;
         });

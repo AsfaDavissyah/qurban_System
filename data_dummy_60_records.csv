@@ -1,4 +1,4 @@
-NIK,Nama,Alamat,No Telp,Panitia,Berqurban,Role,NIK
+INSERT INTO users (nik, nama, alamat, telepon, is_panitia, is_berqurban, role, password) VALUES
 ('3201234567890002','Siti Nurhaliza','RT 001 Desa AAAA',081234567891,FALSE,FALSE,'3201234567890002123'),
 ('3201234567890001','Ahmad Rizki Pratama','RT 001 Desa AAAA',081234567890,TRUE,FALSE,'3201234567890001123'),
 ('3201234567890003','Budi Santoso','RT 001 Desa AAAA',081234567892,FALSE,FALSE,'3201234567890003123'),

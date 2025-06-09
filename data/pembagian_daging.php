@@ -1,7 +1,6 @@
 <?php
 require_once '../config/db.php';
 
-// Cek apakah user adalah admin atau panitia
 if (!isset($_SESSION['nik'])) {
     header("Location: ../index.php");
     exit;
@@ -16,17 +15,16 @@ if ($user_data['role'] !== 'admin' && $user_data['is_panitia'] != 1) {
     exit;
 }
 
-// Function untuk menghitung jumlah daging berdasarkan status
 function hitungJumlahDaging($is_panitia, $is_berqurban)
 {
-    $jumlah = 1; // Default warga biasa = 1kg
+    $jumlah = 1; 
 
     if ($is_panitia == 1) {
-        $jumlah += 1; // Panitia tambah 1kg
+        $jumlah += 1; 
     }
 
     if ($is_berqurban == 1) {
-        $jumlah += 2; // Berqurban tambah 2kg
+        $jumlah += 2; 
     }
 
     return $jumlah;
@@ -37,16 +35,13 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Mulai transaction
         $conn->begin_transaction();
 
-        // Hapus data pembagian yang sudah ada (jika ingin reset)
         if (isset($_POST['reset_pembagian'])) {
             $conn->query("DELETE FROM pembagian_daging");
             $message = "Data pembagian daging berhasil direset!";
         }
 
-        // Proses pembagian daging otomatis
         if (isset($_POST['bagi_otomatis'])) {
             // Ambil semua warga
             $query = "SELECT nik, nama, is_panitia, is_berqurban FROM users WHERE role = 'warga'";
@@ -61,24 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $is_panitia = $warga['is_panitia'];
                 $is_berqurban = $warga['is_berqurban'];
 
-                // Hitung jumlah daging
                 $jumlah_kg = hitungJumlahDaging($is_panitia, $is_berqurban);
 
-                // Untuk sementara QR Code path kosong dulu
                 $qr_path = null;
 
-                // Cek apakah sudah ada data untuk NIK ini
                 $check_existing = $conn->query("SELECT id FROM pembagian_daging WHERE nik = '$nik_warga'");
 
                 if ($check_existing->num_rows > 0) {
-                    // Update data yang sudah ada
                     $update_query = "UPDATE pembagian_daging SET 
                                    jumlah_kg = $jumlah_kg, 
                                    status = 'belum_ambil'
                                    WHERE nik = '$nik_warga'";
                     $conn->query($update_query);
                 } else {
-                    // Insert data baru
                     $insert_query = "INSERT INTO pembagian_daging (nik, jumlah_kg, status, qrcode_path) 
                                    VALUES ('$nik_warga', $jumlah_kg, 'belum_ambil', NULL)";
                     $conn->query($insert_query);
@@ -92,12 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Pembagian daging berhasil! Total $count_warga warga mendapat $total_distributed kg daging.";
         }
 
-        // Proses pembagian manual untuk warga tertentu
         if (isset($_POST['bagi_manual'])) {
             $nik_manual = $_POST['nik_manual'];
             $jumlah_manual = floatval($_POST['jumlah_manual']);
 
-            // Validasi NIK
             $check_user = $conn->query("SELECT nama FROM users WHERE nik = '$nik_manual'");
             if ($check_user->num_rows == 0) {
                 throw new Exception("NIK tidak ditemukan!");
@@ -106,10 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_info = $check_user->fetch_assoc();
             $nama_manual = $user_info['nama'];
 
-            // Untuk sementara QR Code path kosong dulu
             $qr_path = null;
 
-            // Cek apakah sudah ada data
             $check_existing = $conn->query("SELECT id FROM pembagian_daging WHERE nik = '$nik_manual'");
 
             if ($check_existing->num_rows > 0) {
@@ -133,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Ambil statistik pembagian
 $stats_query = "SELECT 
     COUNT(*) as total_penerima,
     SUM(jumlah_kg) as total_kg,
@@ -142,7 +127,6 @@ $stats_query = "SELECT
     FROM pembagian_daging";
 $stats = $conn->query($stats_query)->fetch_assoc();
 
-// Ambil data pembagian dengan info warga
 $pembagian_query = "SELECT pd.*, u.nama, u.is_panitia, u.is_berqurban 
                    FROM pembagian_daging pd 
                    JOIN users u ON pd.nik = u.nik 
@@ -153,7 +137,6 @@ $pembagian_result = $conn->query($pembagian_query);
 <?php include '../template/header.php'; ?>
 
 <style>
-    /* Sama seperti style di pembagian_daging.php, tapi dengan tambahan untuk admin */
     body {
         background-color: var(--primary-black) !important;
         color: var(--text-white) !important;
@@ -326,7 +309,6 @@ $pembagian_result = $conn->query($pembagian_query);
 
     input.form-control::placeholder {
         color: #b3b3b3;
-        /* warna kuning cerah */
     }
 </style>
 
@@ -345,7 +327,6 @@ $pembagian_result = $conn->query($pembagian_query);
         </div>
     <?php endif; ?>
 
-    <!-- Statistik Pembagian -->
     <div class="stats-grid">
         <div class="stat-card">
             <span class="stat-number"><?= $stats['total_penerima'] ?? 0 ?></span>
@@ -365,7 +346,6 @@ $pembagian_result = $conn->query($pembagian_query);
         </div>
     </div>
 
-    <!-- Form Pembagian Otomatis -->
     <div class="form-section">
         <h5><i class="fas fa-magic"></i> Pembagian Otomatis</h5>
         <p class="text-muted mb-3">
@@ -387,7 +367,6 @@ $pembagian_result = $conn->query($pembagian_query);
         </form>
     </div>
 
-    <!-- Form Pembagian Manual -->
     <div class="form-section">
         <h5><i class="fas fa-user-edit"></i> Pembagian Manual</h5>
         <form method="POST" class="row g-3">
@@ -409,7 +388,6 @@ $pembagian_result = $conn->query($pembagian_query);
         </form>
     </div>
 
-    <!-- Tabel Data Pembagian -->
     <div class="table-responsive">
         <table class="table table-dark table-striped">
             <thead>

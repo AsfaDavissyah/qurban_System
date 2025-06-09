@@ -72,7 +72,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
         margin: 0;
     }
 
-    /* Info Card */
     .info-card {
         background: #1e1e1e;
         border-radius: 12px;
@@ -186,7 +185,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
         border-radius: 8px;
     }
 
-    /* Action Buttons */
     .action-buttons {
         display: flex;
         gap: 1rem;
@@ -219,7 +217,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
         box-shadow: 0 4px 12px rgba(42, 42, 42, 0.3);
     }
 
-    /* Animation */
     .welcome-section,
     .info-card {
         animation: fadeInUp 0.6s ease-out;
@@ -241,7 +238,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
         }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .dashboard-container {
             padding: 0 1rem;
@@ -275,7 +271,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
 
 <div class="content-area">
     <div class="dashboard-container">
-        <!-- Welcome Section -->
         <div class="welcome-section">
             <div class="welcome-icon">
                 <i class="fas fa-hand-holding-heart"></i>
@@ -284,9 +279,7 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
             <p class="welcome-subtitle">Berikut informasi qurban Anda</p>
         </div>
 
-        <!-- Info Card -->
         <div class="info-card">
-            <!-- Informasi Iuran -->
             <div class="info-section">
                 <div class="info-title">
                     <div class="info-title-icon">
@@ -322,7 +315,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
                 </ul>
             </div>
 
-            <!-- Hak Daging -->
             <div class="info-section">
                 <div class="info-title">
                     <div class="info-title-icon">
@@ -341,7 +333,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_berqurban']) {
             </div>
         </div>
 
-        <!-- Action Buttons -->
         <div class="action-buttons">
             <a href="warga.php" class="btn-secondary">
                 <i class="fas fa-arrow-left"></i>

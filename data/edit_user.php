@@ -1,11 +1,6 @@
 <?php
-// ===========================================
-// FILE: edit_user.php
-// ===========================================
-// session_start();
 require_once '../config/db.php';
 
-// Check if user is admin
 if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../index.php");
     exit;
@@ -27,7 +22,6 @@ if (!empty($nik)) {
     }
 }
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $old_nik = $_POST['old_nik'];
     $new_nik = $_POST['nik'];
@@ -40,9 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $conn->begin_transaction();
 
-        // If NIK changed, we need to update all related tables
         if ($old_nik !== $new_nik) {
-            // Check if new NIK already exists
             $check_stmt = $conn->prepare("SELECT nik FROM users WHERE nik = ? AND nik != ?");
             $check_stmt->bind_param("ss", $new_nik, $old_nik);
             $check_stmt->execute();
@@ -50,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 throw new Exception("NIK baru sudah digunakan!");
             }
 
-            // Update related tables
             $related_updates = [
                 "UPDATE qurban_peserta SET nik = ? WHERE nik = ?",
                 "UPDATE qurban_hewan SET penanggung_jawab = ? WHERE penanggung_jawab = ?",
@@ -66,14 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Update users table
         if (!empty($password)) {
-            // Update with new password
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $update_stmt = $conn->prepare("UPDATE users SET nik = ?, nama = ?, telepon = ?, is_panitia = ?, is_berqurban = ?, password = ? WHERE nik = ?");
             $update_stmt->bind_param("sssiiss", $new_nik, $nama, $telepon, $is_panitia, $is_berqurban, $hashed_password, $old_nik);
         } else {
-            // Update without changing password
             $update_stmt = $conn->prepare("UPDATE users SET nik = ?, nama = ?, telepon = ?, is_panitia = ?, is_berqurban = ? WHERE nik = ?");
             $update_stmt->bind_param("sssiis", $new_nik, $nama, $telepon, $is_panitia, $is_berqurban, $old_nik);
         }
@@ -347,14 +335,6 @@ include '../template/header.php';
 
 <?php include '../template/footer.php'; ?>
 
-<?php
-// ===========================================
-// FILE: users_updated.php (Update users.php dengan link edit)
-// ===========================================
-// Ganti bagian action buttons di users.php dengan kode berikut:
-?>
-
-<!-- Dalam file users.php, ganti bagian action buttons dengan ini: -->
 <td>
     <div class="action-buttons">
         <a href="edit_user.php?nik=<?= urlencode($row['nik']) ?>" class="btn-action btn-edit" title="Edit">

@@ -21,7 +21,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         padding: 0 1rem;
     }
 
-    /* Welcome Section */
     .welcome-section {
         background: #1e1e1e;
         border-radius: 12px;
@@ -72,7 +71,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         margin: 0;
     }
 
-    /* Menu Sections */
     .menu-section {
         margin-bottom: 3rem;
     }
@@ -102,7 +100,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         color: #e1f21f;
     }
 
-    /* Menu Grid */
     .menu-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -196,7 +193,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         margin: 0;
     }
 
-    /* Special styling for personal QR card */
     .personal-qr-card {
         background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
         border: 1px solid #e1f21f;
@@ -212,7 +208,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         background: rgba(225, 242, 31, 0.2);
     }
 
-    /* Logout Section */
     .logout-section {
         text-align: center;
         padding-top: 2rem;
@@ -242,7 +237,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    /* Animation */
     .welcome-section {
         animation: fadeIn 0.6s ease-out;
     }
@@ -295,7 +289,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
         }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .dashboard-container {
             padding: 0 1rem;
@@ -330,7 +323,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
 
 <div class="content-area">
     <div class="dashboard-container">
-        <!-- Welcome Section -->
         <div class="welcome-section">
             <div class="welcome-icon">
                 <i class="fas fa-user-cog"></i>
@@ -339,7 +331,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
             <p class="welcome-subtitle">Kelola kegiatan qurban sebagai panitia</p>
         </div>
 
-        <!-- Personal Access Section -->
         <div class="menu-section">
             <h3 class="section-title">
                 <div class="section-title-icon">
@@ -358,7 +349,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
             </div>
         </div>
 
-        <!-- Panitia Functions Section -->
         <div class="menu-section">
             <h3 class="section-title">
                 <div class="section-title-icon">
@@ -385,7 +375,6 @@ if (!isset($_SESSION['nik']) || !$_SESSION['is_panitia']) {
             </div>
         </div>
 
-        <!-- Logout Section -->
         <div class="logout-section">
             <a href="../auth/logout.php" class="btn-logout">
                 <i class="fas fa-sign-out-alt"></i>

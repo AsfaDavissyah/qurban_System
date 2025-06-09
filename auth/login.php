@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $result->fetch_assoc();
 
     if ($user && password_verify($password, $user['password'])) {
-        // Simpan data session
         $_SESSION['nik'] = $user['nik'];
         $_SESSION['nama'] = $user['nama'];
         $_SESSION['role'] = $user['role'];

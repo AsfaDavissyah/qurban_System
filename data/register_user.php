@@ -5,7 +5,6 @@ if (!isset($_SESSION['nik']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
-// Proses form saat disubmit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nik = $_POST['nik'];
     $nama = $_POST['nama'];
@@ -15,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $is_berqurban = isset($_POST['is_berqurban']) ? 1 : 0;
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    // Simpan ke database
     $stmt = $conn->prepare("INSERT INTO users (nik, nama, alamat, telepon, is_panitia, is_berqurban, role, password) VALUES (?, ?, ?, ?, ?, ?, 'warga', ?)");
     $stmt->bind_param("ssssiss", $nik, $nama, $alamat, $telepon, $is_panitia, $is_berqurban, $password);
 
@@ -49,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        /* Page Header - konsisten dengan style existing */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -66,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
         }
 
-        /* Alert Messages */
         .alert {
             padding: 1rem 1.25rem;
             border-radius: 8px;
@@ -87,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #f87171;
         }
 
-        /* Form Styles */
         .row {
             display: flex;
             flex-wrap: wrap;
@@ -109,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 0.5rem;
         }
 
-        /* Form Labels */
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
@@ -118,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 0.9rem;
         }
 
-        /* Form Controls - styling yang konsisten */
         .form-control {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -141,13 +134,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #666666;
         }
 
-        /* Textarea */
         textarea.form-control {
             min-height: 100px;
             resize: vertical;
         }
 
-        /* Checkbox Styles */
         .form-check {
             display: flex;
             align-items: center;
@@ -197,7 +188,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 500;
         }
 
-        /* Button Styles - konsisten dengan style existing */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -241,7 +231,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-color: #555555;
         }
 
-        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -262,7 +251,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 2rem 1rem;
         }
 
-        /* Responsive Design - konsisten dengan breakpoint existing */
         @media (max-width: 768px) {
             .col-md-6,
             .col-md-4 {
@@ -303,7 +291,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        /* Focus States untuk Accessibility */
         *:focus {
             outline: 2px solid #e1f21f;
             outline-offset: 2px;

@@ -1,9 +1,7 @@
 <?php
-// Lokasi library phpqrcode
 require_once '../phpqrcode/qrlib.php';
 require_once '../config/db.php';
 
-// Pastikan user sudah login
 if (!isset($_SESSION['nik'])) {
     header("Location: ../index.php");
     exit;
@@ -11,25 +9,20 @@ if (!isset($_SESSION['nik'])) {
 
 $current_nik = $_SESSION['nik'];
 
-// Cek role user - admin/panitia bisa generate untuk siapa saja, warga hanya untuk diri sendiri
 $user_check = $conn->query("SELECT role, is_panitia FROM users WHERE nik = '$current_nik'");
 $user_data = $user_check->fetch_assoc();
 
 $is_admin_or_panitia = ($user_data['role'] === 'admin' || $user_data['is_panitia'] == 1);
 
-// Ambil NIK dari parameter, default ke NIK user yang login
 $target_nik = isset($_GET['nik']) ? $_GET['nik'] : $current_nik;
 
-// Jika bukan admin/panitia, hanya bisa generate QR untuk diri sendiri
 if (!$is_admin_or_panitia && $target_nik !== $current_nik) {
     echo "<script>alert('Anda tidak memiliki akses untuk generate QR Code warga lain!'); window.close();</script>";
     exit;
 }
 
-// Cek jika ada parameter download
 $is_download = isset($_GET['download']) && $_GET['download'] == '1';
 
-// Ambil data lengkap user dan pembagian daging
 $stmt = $conn->prepare("
     SELECT u.nik, u.nama, u.alamat, u.telepon, u.is_panitia, u.is_berqurban, u.role,
            pd.jumlah_kg, pd.status, pd.id as pembagian_id
@@ -48,13 +41,11 @@ if ($result->num_rows === 0) {
 
 $data = $result->fetch_assoc();
 
-// Jika belum ada data pembagian daging
 if (!$data['pembagian_id']) {
     echo "<script>alert('Data pembagian daging untuk warga ini belum ada!'); window.close();</script>";
     exit;
 }
 
-// Siapkan data untuk QR Code
 $nik = $data['nik'];
 $nama = $data['nama'];
 $alamat = $data['alamat'];
@@ -62,17 +53,14 @@ $telepon = $data['telepon'];
 $jumlah_kg = $data['jumlah_kg'];
 $status_pengambilan = $data['status'];
 
-// Tentukan status/role warga
 $status_badges = [];
 if ($data['is_panitia'] == 1) $status_badges[] = 'Panitia';
 if ($data['is_berqurban'] == 1) $status_badges[] = 'Berqurban';
 if (empty($status_badges)) $status_badges[] = 'Warga';
 $status_role = implode(' + ', $status_badges);
 
-// Generate waktu pengambilan (misalnya berdasarkan jam tertentu)
 $jam_pengambilan = "08:00 - 12:00 WIB";
 
-// Format isi QR Code dengan informasi lengkap
 $qr_content = "=== PEMBAGIAN DAGING QURBAN ===\n";
 $qr_content .= "NIK: $nik\n";
 $qr_content .= "Nama: $nama\n";
@@ -82,7 +70,6 @@ $qr_content .= "Jam Pengambilan: $jam_pengambilan\n";
 $qr_content .= "Status: " . ucwords(str_replace('_', ' ', $status_pengambilan)) . "\n";
 $qr_content .= "Generated: " . date('d/m/Y H:i:s');
 
-// Lokasi output QR
 $qr_dir = "../qrcode/";
 if (!is_dir($qr_dir)) {
     mkdir($qr_dir, 0755, true);
@@ -90,10 +77,8 @@ if (!is_dir($qr_dir)) {
 
 $filename = $qr_dir . $nik . ".png";
 
-// Generate QR Code (selalu regenerate untuk update data terbaru)
 QRcode::png($qr_content, $filename, QR_ECLEVEL_H, 6, 2);
 
-// Update path QR di database jika belum ada
 if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
     $update_qr = $conn->prepare("UPDATE pembagian_daging SET qrcode_path = ? WHERE nik = ?");
     $qr_path = $nik . ".png";
@@ -101,25 +86,20 @@ if (empty($data['qrcode_path']) || $data['qrcode_path'] != $nik . ".png") {
     $update_qr->execute();
 }
 
-// Jika ini adalah request download, update status dan kirim file
 if ($is_download) {
-    // Update status menjadi 'sudah_ambil' hanya jika masih 'belum_ambil'
     if ($status_pengambilan == 'belum_ambil') {
         $update_status = $conn->prepare("UPDATE pembagian_daging SET status = 'sudah_ambil' WHERE nik = ?");
         $update_status->bind_param("s", $nik);
         $update_status->execute();
 
-        // Update status untuk tampilan
         $status_pengambilan = 'sudah_ambil';
     }
 
-    // Kirim file untuk download
     if (file_exists($filename)) {
         header('Content-Type: image/png');
         header('Content-Disposition: attachment; filename="QR_' . $nama . '_' . $nik . '.png"');
         header('Content-Length: ' . filesize($filename));
 
-        // Baca dan kirim file
         readfile($filename);
         exit;
     } else {
@@ -424,7 +404,6 @@ if ($is_download) {
                 <a href="?<?= http_build_query(array_merge($_GET, ['download' => '1'])) ?>" class="btn btn-success">
                     <i class="fas fa-download"></i> Download QR Code
                     <?php if ($status_pengambilan == 'belum_ambil'): ?>
-                        <!-- <small style="font-size: 0.8em; display: block;">(Status akan berubah)</small> -->
                     <?php endif; ?>
                 </a>
 
@@ -437,7 +416,7 @@ if ($is_download) {
                 } elseif ($role === 'warga') {
                     $back_link = '../dashboard/warga.php';
                 } else {
-                    $back_link = 'pembagian_daging.php'; // default untuk admin
+                    $back_link = 'pembagian_daging.php'; 
                 }
                 ?>
 
@@ -449,7 +428,6 @@ if ($is_download) {
     </div>
 
     <script>
-        // Auto focus untuk print dialog jika diperlukan
         document.addEventListener('DOMContentLoaded', function() {
             // Optional: Auto print jika parameter print=1
             const urlParams = new URLSearchParams(window.location.search);
@@ -457,7 +435,6 @@ if ($is_download) {
                 window.print();
             }
 
-            // Konfirmasi download jika status masih belum_ambil
             const downloadBtn = document.querySelector('a[href*="download=1"]');
             if (downloadBtn && <?= $status_pengambilan == 'belum_ambil' ? 'true' : 'false' ?>) {
                 downloadBtn.addEventListener('click', function(e) {

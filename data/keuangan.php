@@ -31,7 +31,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         padding: 2rem 1rem;
     }
 
-    /* Header Section */
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -54,7 +53,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         align-items: center;
     }
 
-    /* Buttons */
     .btn-success {
         background: #e1f21f;
         color: #121212;
@@ -98,7 +96,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         border-color: #555555;
     }
 
-    /* Statistics Cards */
     .stats-row {
         display: flex;
         gap: 20px;
@@ -171,7 +168,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         opacity: 0.8;
     }
 
-    /* Different colors and accents for different stats */
     .stat-card:nth-child(1) {
         --stat-color: #28a745;
         --card-accent: #28a745;
@@ -199,7 +195,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         color: #e1f21f;
     }
 
-    /* Positive/Negative Saldo Styling */
     .stat-card.positive .stat-number {
         color: #28a745;
     }
@@ -212,7 +207,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         color: #ffc107;
     }
 
-    /* Table Styling */
     .table-container {
         background: #1e1e1e;
         border-radius: 12px;
@@ -257,7 +251,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         border-bottom: none;
     }
 
-    /* Transaction Type Badges */
     .transaction-badge {
         padding: 0.4rem 0.8rem;
         border-radius: 20px;
@@ -292,7 +285,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         font-weight: 600;
     }
 
-    /* Action Buttons */
     .action-buttons {
         display: flex;
         gap: 0.5rem;
@@ -340,7 +332,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         transform: scale(1.05);
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .container {
             padding: 1rem;
@@ -389,13 +380,11 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         }
     }
 
-    /* Loading States */
     .table tbody tr.loading {
         opacity: 0.6;
         pointer-events: none;
     }
 
-    /* Empty State */
     .empty-state {
         text-align: center;
         padding: 3rem 1rem;
@@ -408,7 +397,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
         margin-bottom: 1rem;
     }
 
-    /* Animation */
     .table-container,
     .stats-row {
         animation: fadeInUp 0.6s ease-out;
@@ -435,24 +423,20 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
     </div>
 
     <?php
-    // Get total from hewan_qurban (harga_total + biaya_admin)
     $result_hewan = $conn->query("SELECT 
             SUM(harga_total + biaya_admin) as total_pemasukan_hewan
             FROM hewan_qurban");
     $hewan_stats = $result_hewan->fetch_assoc();
     $total_pemasukan_hewan = $hewan_stats['total_pemasukan_hewan'] ?: 0;
 
-    // Get total pengeluaran from keuangan table
     $result_keuangan = $conn->query("SELECT 
             SUM(CASE WHEN jenis = 'pemasukan' THEN jumlah ELSE 0 END) as total_pemasukan_keuangan
             FROM keuangan");
     $keuangan_stats = $result_keuangan->fetch_assoc();
     $total_pemasukan_keuangan = $keuangan_stats['total_pemasukan_keuangan'] ?: 0;
 
-    // Calculate saldo
     $saldo_total = $total_pemasukan_hewan - $total_pemasukan_keuangan;
 
-    // Determine saldo class for styling
     $saldo_class = '';
     if ($saldo_total > 0) {
         $saldo_class = 'positive';
@@ -463,7 +447,6 @@ $result = $conn->query("SELECT * FROM keuangan ORDER BY tanggal DESC");
     }
     ?>
 
-    <!-- Statistics -->
     <div class="stats-row">
         <div class="stat-card">
             <div class="stat-number">
